@@ -1,0 +1,4 @@
+---
+- name: Ensure bbr is enabled
+  sysctl: "name={{ item.name }} value={{ item.value }}"
+  with_items: "{{ bbr_sysctl }}"
