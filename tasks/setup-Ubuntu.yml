@@ -4,17 +4,20 @@
   with_items: "{{ kernel_packages }}"
 
 - name: Install kernel packages
-  apt: "pkg={{ kernel_packages | json_query('[*].dest') }} "
+  apt: "deb={{ item.dest }}"
+  with_items: "{{ kernel_packages }}"
 
 - name: Update grub
   shell: update-grub
 
 - name: Reboot
-  shell: reboot
+  shell: /sbin/shutdown -r +1
   async: 0
   poll: 0
+  ignore_errors: true
 
 - name: Waiting for server come back
   local_action: >
     wait_for host="{{ ansible_ssh_host | default(inventory_hostname) }}"
     state=started port=22 delay=30 timeout=600 connect_timeout=15
+  become: no
