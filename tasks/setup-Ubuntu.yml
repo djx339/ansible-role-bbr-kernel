@@ -1,10 +1,6 @@
 ---
-- name: Download kernel packages
-  get_url: "url={{ item.url }} dest={{ item.dest }}"
-  with_items: "{{ kernel_packages }}"
-
 - name: Install kernel packages
-  apt: "deb={{ item.dest }}"
+  apt: "deb={{ item }}"
   with_items: "{{ kernel_packages }}"
 
 - name: Update grub
@@ -19,5 +15,5 @@
 - name: Waiting for server come back
   local_action: >
     wait_for host="{{ ansible_ssh_host | default(inventory_hostname) }}"
-    state=started port=22 delay=30 timeout=600 connect_timeout=15
+    state=started port=22 delay=70 timeout=600 connect_timeout=5
   become: no
